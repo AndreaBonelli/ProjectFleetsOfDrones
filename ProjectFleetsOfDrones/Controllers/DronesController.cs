@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using ProjectFleetsOfDrones.Helpers;
 using ProjectFleetsOfDrones.Models;
 using System.IO;
 using System.Text;
@@ -12,14 +13,10 @@ namespace ProjectFleetsOfDrones.Controllers
         [HttpPost]
         public IActionResult Add([FromBody] Drone drone)
         {
-            Write(drone.ToString()+"\n");
+            Helper.Write(Helper.DronesPath, Helper.Serialize(drone));
             return Ok(drone);
         }
 
-        public static void Write(string s)
-        {
-            System.IO.File.AppendAllText("Drones.txt", s);
-        }
 
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProjectFleetsOfDrones.Helpers;
 using ProjectFleetsOfDrones.Models;
+using System.Text.Json;
 
 namespace ProjectFleetsOfDrones.Controllers
 {
@@ -11,13 +13,24 @@ namespace ProjectFleetsOfDrones.Controllers
         [HttpPost]
         public IActionResult Add([FromBody] Flight flight)
         {
-            Write(flight.ToString() + "\n");
+            Helper.Write(Helper.FlightsPath, Helper.Serialize(flight));
             return Ok(flight);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetDetails(int id)
+        {
+            string text=Read();
+            return Ok(text);
         }
 
         public static void Write(string s)
         {
             System.IO.File.AppendAllText("Flights.txt", s);
+        }
+        public static string Read()
+        {
+            return System.IO.File.ReadAllText("Flights.txt");
         }
     }
 }

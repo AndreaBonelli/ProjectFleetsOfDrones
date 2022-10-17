@@ -1,1 +1,0 @@
-Drone Id: 1, Flight time: 00:00:00, Propulsion type: REACTION, Pilot type: AIDrone Id: 2, Flight time: 00:00:00, Propulsion type: FIXEDWING, Pilot type: AI
