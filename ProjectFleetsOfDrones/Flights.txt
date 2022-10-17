@@ -1,1 +1,1 @@
-[{"FlightId":3,"StartDate":"2022-10-17T14:34:25.48Z","EndDate":"2022-10-17T17:40:30.48Z","DroneId":null},{"FlightId":2,"StartDate":"2022-10-17T14:34:25.48Z","EndDate":"2022-10-17T17:40:30.48Z","DroneId":null},{"FlightId":1,"StartDate":"2022-10-17T14:34:25.48Z","EndDate":"2022-10-17T17:40:30.48Z","DroneId":null}]
+[{"FlightId":0,"StartDate":"2022-10-17T15:56:03.892Z","EndDate":"2022-10-17T15:56:03.892Z","DroneId":3},{"FlightId":0,"StartDate":"2022-10-17T15:56:03.892Z","EndDate":"2022-10-17T15:56:03.892Z","DroneId":null}]

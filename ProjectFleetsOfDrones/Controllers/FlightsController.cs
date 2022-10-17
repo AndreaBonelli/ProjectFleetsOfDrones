@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectFleetsOfDrones.Helpers;
 using ProjectFleetsOfDrones.Models;
+using System.Collections.Generic;
 using System.Text.Json;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -23,18 +24,68 @@ namespace ProjectFleetsOfDrones.Controllers
         [HttpGet("{id}")]
         public IActionResult GetDetails(int id)
         {
+            string flights = Helper.Read(Helper.FlightsPath);
+            List<Flight> listFlights = Helper.Deserialize<Flight>(flights);
+
+            string drones = Helper.Read(Helper.DronesPath);
+            List<Drone> listDrones = Helper.Deserialize<Drone>(drones);
+
+            foreach (var flight in listFlights)
+            {
+                foreach (var drone in listDrones)
+                {
+                    if (flight.DroneId == drone.DroneId)
+                    {
+                        FlightWithDrone fwd = new();
+                        fwd.FlightId = flight.FlightId;
+                        fwd.StartDate = flight.StartDate;
+                        fwd.EndDate = flight.EndDate;
+                        fwd.Drone = drone;
+                        return Ok(fwd);
+                    }
+                }
+            }
+                
+            return BadRequest();
+        }
+
+        [HttpGet]
+        public IActionResult Get()
+        {
             string text = Helper.Read(Helper.FlightsPath);
             List<Flight> list = Helper.Deserialize<Flight>(text);
-            
-            foreach(var item in list)
+
+            return Ok(list);
+            //return BadRequest();
+        }
+
+        [HttpPut("{idFlight}/drone/{idDrone}")]
+        public IActionResult InsertDrone(int idFlight, int idDrone)
+        {
+            string flights = Helper.Read(Helper.FlightsPath);
+            List<Flight> listFlights = Helper.Deserialize<Flight>(flights);
+
+            string drones = Helper.Read(Helper.DronesPath);
+            List<Drone> listDrones = Helper.Deserialize<Drone>(drones);
+
+            foreach (var flight in listFlights)
             {
-                if (item.FlightId == id)
+                foreach (var drone in listDrones)
                 {
-                    return Ok(item);
+                    if (flight.FlightId == idFlight &&
+                        drone.DroneId == idDrone)
+                    {
+                        flight.DroneId = drone.DroneId;
+                        Helper.Write(Helper.FlightsPath, listFlights);
+                        return Ok(flight);
+                    }
                 }
             }
             return BadRequest();
+            
         }
+
+        
 
     }
 }
