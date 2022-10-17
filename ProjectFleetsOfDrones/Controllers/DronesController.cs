@@ -13,7 +13,9 @@ namespace ProjectFleetsOfDrones.Controllers
         [HttpPost]
         public IActionResult Add([FromBody] Drone drone)
         {
-            Helper.Write(Helper.DronesPath, Helper.Serialize(drone));
+            List<Drone> list = new();
+            list.Add(drone);
+            Helper.Write(Helper.FlightsPath, list);
             return Ok(drone);
         }
 
