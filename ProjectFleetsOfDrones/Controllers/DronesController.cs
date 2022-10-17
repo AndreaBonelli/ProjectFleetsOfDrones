@@ -12,7 +12,7 @@ namespace ProjectFleetsOfDrones.Controllers
         [HttpPost]
         public IActionResult Add([FromBody] Drone drone)
         {
-            Write(drone.ToString());
+            Write(drone.ToString()+"\n");
             return Ok(drone);
         }
 
