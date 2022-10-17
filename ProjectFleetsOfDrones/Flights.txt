@@ -1,0 +1,1 @@
+[{"FlightId":0,"StartDate":"2022-10-17T15:56:03.892Z","EndDate":"2022-10-17T15:56:03.892Z","DroneId":3},{"FlightId":0,"StartDate":"2022-10-17T15:56:03.892Z","EndDate":"2022-10-17T15:56:03.892Z","DroneId":null}]

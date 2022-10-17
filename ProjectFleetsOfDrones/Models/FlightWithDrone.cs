@@ -1,15 +1,15 @@
 ﻿namespace ProjectFleetsOfDrones.Models
 {
-    public class Flight
+    public class FlightWithDrone
     {
         public int FlightId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public int? DroneId { get; set; }
+        public Drone Drone { get; set; }
 
         public override string? ToString()
         {
-            return $"Flight Id: {FlightId}, Start date: {StartDate}, End date: {EndDate}, Drone Id: {DroneId}";
+            return $"Flight Id: {FlightId}, Start date: {StartDate}, End date: {EndDate}, Drone: {Drone}";
         }
     }
 }
