@@ -53,7 +53,7 @@ namespace ProjectFleetsOfDrones.Controllers
         [HttpPut("{idFlight}/drone/{idDrone}")]
         public IActionResult InsertDrone(int idFlight, int idDrone)
         {
-            var flight = _flightService.InsertFlight(idFlight, idDrone);
+            var flight = _flightService.InsertDroneToFlight(idFlight, idDrone);
             if (flight == null)
                 return BadRequest();
             return Ok(flight);

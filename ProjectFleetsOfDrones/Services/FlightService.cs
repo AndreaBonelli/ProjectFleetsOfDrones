@@ -48,28 +48,42 @@ namespace ProjectFleetsOfDrones.Services
             return list;
         }
 
-        public Flight InsertFlight(int idFlight, int idDrone)
+        public Flight InsertDroneToFlight(int idFlight, int idDrone)
         {
-            string flights = FileHelper.Read(FileHelper.FlightsPath);
-            List<Flight> listFlights = FileHelper.Deserialize<Flight>(flights);
+            var flights = FileHelper.ReadAndDeserialize<Flight>(FileHelper.FlightsPath);
+            var drones = FileHelper.ReadAndDeserialize<Drone>(FileHelper.DronesPath);
 
-            string drones = FileHelper.Read(FileHelper.DronesPath);
-            List<Drone> listDrones = FileHelper.Deserialize<Drone>(drones);
+            //if (flights.Count() == 0)
+            //    return null;
+            //if (drones.Count() == 0)
+            //    return null;
 
-            foreach (var flight in listFlights)
+            var flightToUpdate = flights.FirstOrDefault(flight => flight.FlightId == idFlight);
+            var droneToInsert = drones.FirstOrDefault(drone => drone.DroneId == idDrone);
+
+            if (flightToUpdate == default || droneToInsert == default)
+                return null;
+
+            //se il Drone preso ha altri voli previsti nel timespan del volo da modificare.
+            
+            //Voglio prendere tutti i voli a cui partecipa il drone
+            var flightsOfDrone = flights.Where(flight => flight.DroneId == droneToInsert.DroneId);
+
+            //Voglio vedere se c'è almeno un volo con timespan coincidente
+            var isDroneAvailable = flightsOfDrone.All(flight =>
+                                        flightToUpdate.EndDate < flight.StartDate ||
+                                        flightToUpdate.StartDate > flight.EndDate);
+                                        //flight.EndDate < flightToUpdate.StartDate);
+            if (isDroneAvailable)
             {
-                foreach (var drone in listDrones)
-                {
-                    if (flight.FlightId == idFlight &&
-                        drone.DroneId == idDrone)
-                    {
-                        flight.DroneId = drone.DroneId;
-                        FileHelper.Write(FileHelper.FlightsPath, listFlights);
-                        return flight;
-                    }
-                }
+                flightToUpdate.DroneId = droneToInsert.DroneId;
+                FileHelper.Write(FileHelper.FlightsPath, flights.ToList());
+                return flightToUpdate;
             }
-            return null;
+            else
+            {
+                return null;
+            }
         }
     }
 }
