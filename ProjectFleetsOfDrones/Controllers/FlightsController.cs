@@ -17,11 +17,25 @@ namespace ProjectFleetsOfDrones.Controllers
                                                            //Se non corrisponde AspnetCore restituisce 400.
         {
             var flightAdded = _flightService.AddFlight(flight);
-            return Ok(flightAdded);
+            //return Created($"flights/{flightAdded.FlightId}",flightAdded); Created come URI
+            return CreatedAtAction(
+                nameof(GetDetail),  //"GetDetail" come stringa
+                new
+                {
+                    id = flightAdded.FlightId
+                },
+            //    new
+            //{
+            //    id = flightAdded.FlightId,
+            //    name = "Marco",
+            //    color = "Rosso"
+            //}, 
+                flightAdded);
         }
 
+        //[HttpGet("{id}/{name}/{color}")]
         [HttpGet("{id}")]
-        public IActionResult GetDetails(int id)
+        public IActionResult GetDetail(int id)
         {
             var resultFlight = _flightService.GetDetailsFlight(id);
             if(resultFlight == null)
