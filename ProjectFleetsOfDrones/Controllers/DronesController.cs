@@ -15,7 +15,7 @@ namespace ProjectFleetsOfDrones.Controllers
         {
             List<Drone> list = new();
             list.Add(drone);
-            Helper.Write(Helper.DronesPath, list);
+            FileHelper.Write(FileHelper.DronesPath, list);
             return Ok(drone);
         }
 

@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProjectFleetsOfDrones.Helpers;
+using ProjectFleetsOfDrones.Interfaces;
 using ProjectFleetsOfDrones.Models;
-using System.Collections.Generic;
-using System.Text.Json;
-using static System.Net.Mime.MediaTypeNames;
+using ProjectFleetsOfDrones.Services;
 
 namespace ProjectFleetsOfDrones.Controllers
 {
@@ -12,80 +10,39 @@ namespace ProjectFleetsOfDrones.Controllers
     [ApiController]
     public class FlightsController : ControllerBase
     {
+        private readonly IFlightService _flightService = new FlightService();
+
         [HttpPost]
-        public IActionResult Add([FromBody] Flight flight)
+        public IActionResult Add([FromBody] Flight flight) //Entro nell'action method se il modello deserializzato corrisponde al tipo Flight.
+                                                           //Se non corrisponde AspnetCore restituisce 400.
         {
-            List<Flight> list = new();
-            list.Add(flight);
-            Helper.Write(Helper.FlightsPath, list);
-            return Ok(flight);
+            var flightAdded = _flightService.AddFlight(flight);
+            return Ok(flightAdded);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetDetails(int id)
         {
-            string flights = Helper.Read(Helper.FlightsPath);
-            List<Flight> listFlights = Helper.Deserialize<Flight>(flights);
-
-            string drones = Helper.Read(Helper.DronesPath);
-            List<Drone> listDrones = Helper.Deserialize<Drone>(drones);
-
-            foreach (var flight in listFlights)
-            {
-                foreach (var drone in listDrones)
-                {
-                    if (flight.DroneId == drone.DroneId)
-                    {
-                        FlightWithDrone fwd = new();
-                        fwd.FlightId = flight.FlightId;
-                        fwd.StartDate = flight.StartDate;
-                        fwd.EndDate = flight.EndDate;
-                        fwd.Drone = drone;
-                        return Ok(fwd);
-                    }
-                }
-            }
-                
-            return BadRequest();
+            var resultFlight = _flightService.GetDetailsFlight(id);
+            if(resultFlight == null)
+                return NotFound();
+            return Ok(resultFlight);
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            string text = Helper.Read(Helper.FlightsPath);
-            List<Flight> list = Helper.Deserialize<Flight>(text);
-
-            return Ok(list);
-            //return BadRequest();
+            var resultFlights = _flightService.GetFlights();
+            return Ok(resultFlights);
         }
 
         [HttpPut("{idFlight}/drone/{idDrone}")]
         public IActionResult InsertDrone(int idFlight, int idDrone)
         {
-            string flights = Helper.Read(Helper.FlightsPath);
-            List<Flight> listFlights = Helper.Deserialize<Flight>(flights);
-
-            string drones = Helper.Read(Helper.DronesPath);
-            List<Drone> listDrones = Helper.Deserialize<Drone>(drones);
-
-            foreach (var flight in listFlights)
-            {
-                foreach (var drone in listDrones)
-                {
-                    if (flight.FlightId == idFlight &&
-                        drone.DroneId == idDrone)
-                    {
-                        flight.DroneId = drone.DroneId;
-                        Helper.Write(Helper.FlightsPath, listFlights);
-                        return Ok(flight);
-                    }
-                }
-            }
-            return BadRequest();
-            
+            var flight = _flightService.InsertFlight(idFlight, idDrone);
+            if (flight == null)
+                return BadRequest();
+            return Ok(flight);
         }
-
-        
-
     }
 }

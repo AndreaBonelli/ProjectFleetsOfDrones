@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace ProjectFleetsOfDrones.Helpers
 {
-    public static class Helper
+    public static class FileHelper
     {
         public static string DronesPath = "Drones.txt";
         
