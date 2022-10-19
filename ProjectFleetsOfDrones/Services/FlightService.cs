@@ -8,8 +8,8 @@ namespace ProjectFleetsOfDrones.Services
 {
     public class FlightService : IFlightService
     {
-        private readonly IDal _dal = new ListDal();
-        
+        private readonly IDal _dal;
+
         //TODO: Modificare le interfacce in modo da renderle generiche e separate.
         //private readonly IDalDrone _dalDrone;
         //private readonly IDalFlight _dalFlight;
@@ -17,6 +17,13 @@ namespace ProjectFleetsOfDrones.Services
         //TODO: Refactoring degli altri metodi
         //TODO: Riscrivere il metodo Write con l'ingresso di un solo volo (modificato)
 
+
+        //Lista scoped iniettata dal framework e registrata in program
+        public FlightService(IDal dal, IList<int> scopedList)
+        {
+            _dal = dal;
+            scopedList.Add(0);
+        }
 
 
         public Flight AddFlight(Flight flightToAdd)
@@ -56,9 +63,7 @@ namespace ProjectFleetsOfDrones.Services
 
         public List<Flight> GetFlights()
         {
-            string text = FileHelper.Read(FileHelper.FlightsPath);
-            List<Flight> list = FileHelper.Deserialize<Flight>(text);
-            return list;
+            return _dal.ReadFlights().ToList();
         }
 
         public Flight InsertDroneToFlight(int idFlight, int idDrone)

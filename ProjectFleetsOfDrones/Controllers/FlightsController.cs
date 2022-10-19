@@ -10,7 +10,14 @@ namespace ProjectFleetsOfDrones.Controllers
     [ApiController]
     public class FlightsController : ControllerBase
     {
-        private readonly IFlightService _flightService = new FlightService();
+        private readonly IFlightService _flightService;
+
+        public FlightsController(IFlightService flightService,
+            IList<int> scopedList)//Lista scoped iniettata dal framework e registrata in program.
+        {
+            _flightService = flightService;
+            scopedList.Add(10000);
+        }
 
         [HttpPost]
         public IActionResult Add([FromBody] Flight flight) //Entro nell'action method se il modello deserializzato corrisponde al tipo Flight.
