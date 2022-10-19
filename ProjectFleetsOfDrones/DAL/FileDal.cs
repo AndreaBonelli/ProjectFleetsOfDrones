@@ -25,8 +25,21 @@ namespace ProjectFleetsOfDrones.DAL
             FileHelper.Write(DronesPath, drones);
         }
 
+        public void WriteSingleDrone(Drone drone)
+        {
+            List<Drone> drones = FileHelper.ReadAndDeserialize<Drone>(DronesPath).ToList();
+            drones.Add(drone);
+            FileHelper.Write(DronesPath, drones);
+        }
+
         public void WriteFlights(IEnumerable<Flight> flights)
         {
+            FileHelper.Write(FlightsPath, flights);
+        }
+        public void WriteSingleFlight(Flight flight)
+        {
+            List<Flight> flights = FileHelper.ReadAndDeserialize<Flight>(FlightsPath).ToList();
+            flights.Add(flight);
             FileHelper.Write(FlightsPath, flights);
         }
     }

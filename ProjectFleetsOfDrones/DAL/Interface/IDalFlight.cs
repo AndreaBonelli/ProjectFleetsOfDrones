@@ -6,5 +6,6 @@ namespace ProjectFleetsOfDrones.DAL.Interface
     {
         public IEnumerable<Flight> ReadFlights();
         public void WriteFlights(IEnumerable<Flight> flights);
+        public void WriteSingleFlight(Flight flight);
     }
 }

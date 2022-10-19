@@ -13,29 +13,21 @@ namespace ProjectFleetsOfDrones.Services
         private readonly IDalFlight _dalFlight;
         private readonly IDalDrone _dalDrone;
 
-        //TODO: Modificare le interfacce in modo da renderle generiche e separate.
-        //private readonly IDalDrone _dalDrone;
-        //private readonly IDalFlight _dalFlight;
-
-        //TODO: Refactoring degli altri metodi
-        //TODO: Riscrivere il metodo Write con l'ingresso di un solo volo (modificato)
-
-
         //Lista scoped iniettata dal framework e registrata in program
         public FlightService(IDalFlight dal)
         {
             _dalFlight = dal;
         }
 
-
         public Flight AddFlight(PostFlightModel flightToAdd)
         {
             var flightWithId = AddId(flightToAdd);
 
-            var flights = _dalFlight.ReadFlights().ToList();
-            flights.Add(flightWithId);
-
-            _dalFlight.WriteFlights(flights);
+            //var flights = _dalFlight.ReadFlights().ToList();
+            //flights.Add(flightWithId);
+            //_dalFlight.WriteFlights(flights);
+           
+            _dalFlight.WriteSingleFlight(flightWithId);
 
             return flightWithId;
         }

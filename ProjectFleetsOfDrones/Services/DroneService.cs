@@ -19,9 +19,12 @@ namespace ProjectFleetsOfDrones.Services
         {
             var droneWithId = AddId(drone);
 
-            var drones = _dalDrone.ReadDrones().ToList();
-            drones.Add(droneWithId);
-            _dalDrone.WriteDrones(drones);
+            //var drones = _dalDrone.ReadDrones().ToList();
+            //drones.Add(droneWithId);
+            //_dalDrone.WriteDrones(drones);
+
+            _dalDrone.WriteSingleDrone(droneWithId);
+            
             return droneWithId;
         }
 

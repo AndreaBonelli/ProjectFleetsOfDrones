@@ -15,7 +15,6 @@ namespace ProjectFleetsOfDrones.Helpers
             File.WriteAllText(path, newText);
         }
 
-
         public static IEnumerable<T> ReadAndDeserialize<T>(string path)
         {
             string json = File.ReadAllText(path);
@@ -24,9 +23,6 @@ namespace ProjectFleetsOfDrones.Helpers
             IEnumerable<T> resultList = JsonSerializer.Deserialize<IEnumerable<T>>(json);
             return resultList;
         }
-
-
-
 
         public static string Read(string path)
         {
