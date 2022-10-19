@@ -1,8 +1,10 @@
-﻿using ProjectFleetsOfDrones.DAL;
+﻿using System.Dynamic;
+using ProjectFleetsOfDrones.DAL;
 using ProjectFleetsOfDrones.DAL.Interface;
 using ProjectFleetsOfDrones.Helpers;
 using ProjectFleetsOfDrones.Interfaces;
 using ProjectFleetsOfDrones.Models;
+using ProjectFleetsOfDrones.Models.Post;
 
 namespace ProjectFleetsOfDrones.Services
 {
@@ -26,13 +28,22 @@ namespace ProjectFleetsOfDrones.Services
         }
 
 
-        public Flight AddFlight(Flight flightToAdd)
+        public Flight AddFlight(PostFlightModel flightToAdd)
         {
-            List<Flight> flights = new List<Flight>();
-            flights.Add(flightToAdd);
-            FileHelper.Write(FileHelper.FlightsPath, flights);
-            return flightToAdd;
+            var flightWithId = new Flight();
+            flightWithId.FlightId = GetId();
+            flightWithId.StartDate = flightToAdd.StartDate;
+            flightWithId.EndDate = flightToAdd.EndDate;
+            flightWithId.DroneId = flightToAdd.DroneId;
+
+            var flights = _dal.ReadFlights().ToList();
+            flights.Add(flightWithId);
+
+            _dal.WriteFlights(flights);
+
+            return flightWithId;
         }
+
 
         public FlightWithDrone GetDetailsFlight(int id)
         {
@@ -105,6 +116,11 @@ namespace ProjectFleetsOfDrones.Services
             {
                 return null;
             }
+        }
+
+        private int GetId()
+        {
+            return _dal.ReadFlights().Max(flight => flight.FlightId) + 1;
         }
     }
 }

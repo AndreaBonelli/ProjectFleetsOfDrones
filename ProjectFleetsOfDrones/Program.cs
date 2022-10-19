@@ -15,13 +15,19 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IDal, ListDal>();
 builder.Services.AddScoped<IFlightService, FlightService>();
 
+//Singleton: viene iniettata sempre la stessa istanza a chi la richiede.
 //builder.Services.AddSingleton<IList<int>>(new List<int>()
 //{
 //    1,2,3,4,5,6,7,8,9,10,11,12
 //});
 
+//Transient: ogni volta che viene trovata la dipendenza ad IList<int>
+//Viene iniettata una nuova istanza
 //builder.Services.AddTransient<IList<int>, List<int>>();
 
+
+//Scoped: ogni volta che si avvia uno scope (richiesta Http), viene creata un'istanza
+//di List<int> e viene iniettata a tutti quelli che dipendono da IList<int>
 builder.Services.AddScoped<IList<int>, List<int>>();
 
 

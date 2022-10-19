@@ -2,6 +2,7 @@
 using ProjectFleetsOfDrones.Helpers;
 using ProjectFleetsOfDrones.Interfaces;
 using ProjectFleetsOfDrones.Models;
+using ProjectFleetsOfDrones.Models.Post;
 using ProjectFleetsOfDrones.Services;
 
 namespace ProjectFleetsOfDrones.Controllers
@@ -20,7 +21,7 @@ namespace ProjectFleetsOfDrones.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add([FromBody] Flight flight) //Entro nell'action method se il modello deserializzato corrisponde al tipo Flight.
+        public IActionResult Add([FromBody] PostFlightModel flight) //Entro nell'action method se il modello deserializzato corrisponde al tipo Flight.
                                                            //Se non corrisponde AspnetCore restituisce 400.
         {
             var flightAdded = _flightService.AddFlight(flight);
