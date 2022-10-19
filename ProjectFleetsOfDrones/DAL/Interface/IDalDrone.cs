@@ -2,10 +2,9 @@
 
 namespace ProjectFleetsOfDrones.DAL.Interface
 {
-    public interface IDal
+    public interface IDalDrone
     {
-        public IEnumerable<Flight> ReadFlights();
         public IEnumerable<Drone> ReadDrones();
-        public void WriteFlights(IEnumerable<Flight> flights);
+        public void WriteDrones(IEnumerable<Drone> drones);
     }
 }

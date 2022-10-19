@@ -12,8 +12,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IDal, ListDal>();
+builder.Services.AddScoped<IDalDrone, FileDal>();
+builder.Services.AddScoped<IDalFlight, FileDal>();
 builder.Services.AddScoped<IFlightService, FlightService>();
+builder.Services.AddScoped<IDroneService, DroneService>();
 
 //Singleton: viene iniettata sempre la stessa istanza a chi la richiede.
 //builder.Services.AddSingleton<IList<int>>(new List<int>()

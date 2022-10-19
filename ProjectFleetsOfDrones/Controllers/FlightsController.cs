@@ -13,11 +13,9 @@ namespace ProjectFleetsOfDrones.Controllers
     {
         private readonly IFlightService _flightService;
 
-        public FlightsController(IFlightService flightService,
-            IList<int> scopedList)//Lista scoped iniettata dal framework e registrata in program.
+        public FlightsController(IFlightService flightService)//Lista scoped iniettata dal framework e registrata in program.
         {
             _flightService = flightService;
-            scopedList.Add(10000);
         }
 
         [HttpPost]
