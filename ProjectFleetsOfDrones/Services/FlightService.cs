@@ -1,4 +1,6 @@
-﻿using ProjectFleetsOfDrones.Helpers;
+﻿using ProjectFleetsOfDrones.DAL;
+using ProjectFleetsOfDrones.DAL.Interface;
+using ProjectFleetsOfDrones.Helpers;
 using ProjectFleetsOfDrones.Interfaces;
 using ProjectFleetsOfDrones.Models;
 
@@ -6,7 +8,18 @@ namespace ProjectFleetsOfDrones.Services
 {
     public class FlightService : IFlightService
     {
-       public Flight AddFlight(Flight flightToAdd)
+        private readonly IDal _dal = new ListDal();
+        
+        //TODO: Modificare le interfacce in modo da renderle generiche e separate.
+        //private readonly IDalDrone _dalDrone;
+        //private readonly IDalFlight _dalFlight;
+
+        //TODO: Refactoring degli altri metodi
+        //TODO: Riscrivere il metodo Write con l'ingresso di un solo volo (modificato)
+
+
+
+        public Flight AddFlight(Flight flightToAdd)
         {
             List<Flight> flights = new List<Flight>();
             flights.Add(flightToAdd);
@@ -50,8 +63,10 @@ namespace ProjectFleetsOfDrones.Services
 
         public Flight InsertDroneToFlight(int idFlight, int idDrone)
         {
-            var flights = FileHelper.ReadAndDeserialize<Flight>(FileHelper.FlightsPath);
-            var drones = FileHelper.ReadAndDeserialize<Drone>(FileHelper.DronesPath);
+            var flights = _dal.ReadFlights();
+            var drones = _dal.ReadDrones();
+            //var flights = FileHelper.ReadAndDeserialize<Flight>(FileHelper.FlightsPath);
+            //var drones = FileHelper.ReadAndDeserialize<Drone>(FileHelper.DronesPath);
 
             //if (flights.Count() == 0)
             //    return null;
@@ -65,7 +80,7 @@ namespace ProjectFleetsOfDrones.Services
                 return null;
 
             //se il Drone preso ha altri voli previsti nel timespan del volo da modificare.
-            
+
             //Voglio prendere tutti i voli a cui partecipa il drone
             var flightsOfDrone = flights.Where(flight => flight.DroneId == droneToInsert.DroneId);
 
@@ -73,11 +88,12 @@ namespace ProjectFleetsOfDrones.Services
             var isDroneAvailable = flightsOfDrone.All(flight =>
                                         flightToUpdate.EndDate < flight.StartDate ||
                                         flightToUpdate.StartDate > flight.EndDate);
-                                        //flight.EndDate < flightToUpdate.StartDate);
+            //flight.EndDate < flightToUpdate.StartDate);
             if (isDroneAvailable)
             {
                 flightToUpdate.DroneId = droneToInsert.DroneId;
-                FileHelper.Write(FileHelper.FlightsPath, flights.ToList());
+                _dal.WriteFlights(flights); //Passare solo il volo modificato
+                //FileHelper.Write(FileHelper.FlightsPath, flights.ToList());
                 return flightToUpdate;
             }
             else

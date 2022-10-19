@@ -9,7 +9,7 @@ namespace ProjectFleetsOfDrones.Helpers
         public static string DronesPath = "Drones.txt";
         
         public static string FlightsPath = "Flights.txt";
-        public static void Write<T>(string path, List<T> newlist)
+        public static void Write<T>(string path, IEnumerable<T> newlist)
         {
             string newText = Serialize(newlist);
             File.WriteAllText(path, newText);

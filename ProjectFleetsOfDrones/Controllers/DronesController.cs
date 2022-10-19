@@ -10,6 +10,8 @@ namespace ProjectFleetsOfDrones.Controllers
     [Route("[controller]")]
     public class DronesController : ControllerBase
     {
+
+        //TODO: refactoring dell'action method
         [HttpPost]
         public IActionResult Add([FromBody] Drone drone)
         {
