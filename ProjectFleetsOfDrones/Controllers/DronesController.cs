@@ -13,7 +13,12 @@ namespace ProjectFleetsOfDrones.Controllers
     public class DronesController : ControllerBase
     {
         private readonly IDroneService _droneService;
-        
+
+        public DronesController(IDroneService droneService)
+        {
+            _droneService = droneService;
+        }
+
         [HttpPost]
         public IActionResult Add([FromBody] PostDroneModel drone)
         {
