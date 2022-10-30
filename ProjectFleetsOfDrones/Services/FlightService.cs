@@ -1,6 +1,4 @@
-﻿using System.Dynamic;
-using ProjectFleetsOfDrones.DAL;
-using ProjectFleetsOfDrones.DAL.Interface;
+﻿using ProjectFleetsOfDrones.DAL.Interface;
 using ProjectFleetsOfDrones.Helpers;
 using ProjectFleetsOfDrones.Interfaces;
 using ProjectFleetsOfDrones.Models;
@@ -10,41 +8,22 @@ namespace ProjectFleetsOfDrones.Services
 {
     public class FlightService : IFlightService
     {
-        private readonly IDal _dal;
+        private readonly IDataAccessService _dataAccessService;
 
-        //TODO: Modificare le interfacce in modo da renderle generiche e separate.
-        //private readonly IDalDrone _dalDrone;
-        //private readonly IDalFlight _dalFlight;
-
-        //TODO: Refactoring degli altri metodi
-        //TODO: Riscrivere il metodo Write con l'ingresso di un solo volo (modificato)
-
-
-        //Lista scoped iniettata dal framework e registrata in program
-        public FlightService(IDal dal, IList<int> scopedList)
+        public FlightService(IDataAccessService dataAccessService)
         {
-            _dal = dal;
-            scopedList.Add(0);
+            _dataAccessService = dataAccessService;
         }
 
-
+        public List<Flight> GetFlights()
+        {
+            return _dataAccessService.ToList();
+        }
         public Flight AddFlight(PostFlightModel flightToAdd)
         {
-            var flightWithId = new Flight();
-            flightWithId.FlightId = GetId();
-            flightWithId.StartDate = flightToAdd.StartDate;
-            flightWithId.EndDate = flightToAdd.EndDate;
-            flightWithId.DroneId = flightToAdd.DroneId;
-
-            var flights = _dal.ReadFlights().ToList();
-            flights.Add(flightWithId);
-
-            _dal.WriteFlights(flights);
-
-            return flightWithId;
+            var flightWithId = MapToFlight(flightToAdd);
+            return _dataAccessService.Add(flightWithId);
         }
-
-
         public FlightWithDrone GetDetailsFlight(int id)
         {
             string flights = FileHelper.Read(FileHelper.FlightsPath);
@@ -71,16 +50,10 @@ namespace ProjectFleetsOfDrones.Services
 
             return null;
         }
-
-        public List<Flight> GetFlights()
-        {
-            return _dal.ReadFlights().ToList();
-        }
-
         public Flight InsertDroneToFlight(int idFlight, int idDrone)
         {
-            var flights = _dal.ReadFlights();
-            var drones = _dal.ReadDrones();
+            var flights = _dataAccessService.ReadFlights();
+            var drones = _dataAccessService.ReadDrones();
             //var flights = FileHelper.ReadAndDeserialize<Flight>(FileHelper.FlightsPath);
             //var drones = FileHelper.ReadAndDeserialize<Drone>(FileHelper.DronesPath);
 
@@ -108,7 +81,7 @@ namespace ProjectFleetsOfDrones.Services
             if (isDroneAvailable)
             {
                 flightToUpdate.DroneId = droneToInsert.DroneId;
-                _dal.WriteFlights(flights); //Passare solo il volo modificato
+                _dataAccessService.WriteFlights(flights); //Passare solo il volo modificato
                 //FileHelper.Write(FileHelper.FlightsPath, flights.ToList());
                 return flightToUpdate;
             }
@@ -118,9 +91,21 @@ namespace ProjectFleetsOfDrones.Services
             }
         }
 
+        private Flight MapToFlight(PostFlightModel flightToAdd)
+        {
+            var flightWithId = new Flight();
+            flightWithId.FlightId = GetId();
+            flightWithId.StartDate = flightToAdd.StartDate;
+            flightWithId.EndDate = flightToAdd.EndDate;
+            flightWithId.DroneId = flightToAdd.DroneId;
+            return flightWithId;
+        }
         private int GetId()
         {
-            return _dal.ReadFlights().Max(flight => flight.FlightId) + 1;
+            var readFlights = _dataAccessService.ReadFlights();
+            if(readFlights.Any())
+                return readFlights.Max(flight => flight.FlightId) + 1;
+            return 1;
         }
     }
 }
