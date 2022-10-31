@@ -9,5 +9,6 @@ namespace ProjectFleetsOfDrones.DAL.Interface
         public void WriteFlights(IEnumerable<Flight> flights);
         List<Flight> ToList();
         Flight Add(Flight flightToAdd);
+        Flight GetFlightById(int id);
     }
 }

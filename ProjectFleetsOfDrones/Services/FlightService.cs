@@ -17,7 +17,7 @@ namespace ProjectFleetsOfDrones.Services
 
         public List<Flight> GetFlights()
         {
-            return _dataAccessService.ToList();
+            return _dataAccessService.ReadFlights().ToList();
         }
         public Flight AddFlight(PostFlightModel flightToAdd)
         {
@@ -26,29 +26,24 @@ namespace ProjectFleetsOfDrones.Services
         }
         public FlightWithDrone GetDetailsFlight(int id)
         {
-            string flights = FileHelper.Read(FileHelper.FlightsPath);
-            List<Flight> listFlights = FileHelper.Deserialize<Flight>(flights);
+            var flight = _dataAccessService.GetFlightById(id);
 
-            string drones = FileHelper.Read(FileHelper.DronesPath);
-            List<Drone> listDrones = FileHelper.Deserialize<Drone>(drones);
+            var droneWithoutFlights = new DroneWithoutFlights {
+                DroneId = flight.Drone.DroneId,
+                FlightTime = flight.Drone.FlightTime,
+                Pilot = flight.Drone.Pilot.ToString(),
+                Propulsion = flight.Drone.Propulsion.ToString()
+            };
 
-            foreach (var flight in listFlights)
+            var flightWithDrone = new FlightWithDrone
             {
-                foreach (var drone in listDrones)
-                {
-                    if (flight.DroneId == drone.DroneId)
-                    {
-                        FlightWithDrone fwd = new();
-                        fwd.FlightId = flight.FlightId;
-                        fwd.StartDate = flight.StartDate;
-                        fwd.EndDate = flight.EndDate;
-                        fwd.Drone = drone;
-                        return fwd;
-                    }
-                }
-            }
-
-            return null;
+                FlightId = flight.FlightId,
+                StartDate = flight.StartDate,
+                EndDate = flight.EndDate,
+                Drone = droneWithoutFlights
+            };
+                        
+            return flightWithDrone;
         }
         public Flight InsertDroneToFlight(int idFlight, int idDrone)
         {

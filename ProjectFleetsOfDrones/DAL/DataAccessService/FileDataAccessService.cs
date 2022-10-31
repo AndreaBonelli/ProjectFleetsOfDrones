@@ -4,7 +4,7 @@ using ProjectFleetsOfDrones.Models;
 
 namespace ProjectFleetsOfDrones.DAL
 {
-    public class FileDataAccessService : IDataAccessService
+    public class FileDataAccessService
     {
         private readonly string DronesPath = "Drones.txt";
         private readonly string FlightsPath = "Flights.txt";

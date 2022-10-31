@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using ProjectFleetsOfDrones.DAL;
 using ProjectFleetsOfDrones.DAL.Interface;
 using ProjectFleetsOfDrones.Interfaces;
@@ -12,8 +13,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IDataAccessService, FileDataAccessService>();
+builder.Services.AddScoped<IDataAccessService, DbDataAccessService>();
 builder.Services.AddScoped<IFlightService, FlightService>();
+
+builder.Services.AddDbContext<FleetsOfDronesDbContext>(option =>
+                option.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=Test"));
 
 var app = builder.Build();
 

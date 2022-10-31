@@ -3,7 +3,7 @@ using ProjectFleetsOfDrones.Models;
 
 namespace ProjectFleetsOfDrones.DAL
 {
-    public class ListDataAccessService : IDataAccessService
+    public class ListDataAccessService
     {
         private IEnumerable<Flight> _flights = new List<Flight>();
         private IEnumerable<Drone> _drones = new List<Drone>();

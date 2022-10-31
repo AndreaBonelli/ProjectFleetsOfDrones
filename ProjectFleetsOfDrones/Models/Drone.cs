@@ -17,6 +17,7 @@
         public double FlightTime { get; set; }
         public PropulsionType Propulsion { get; set; }
         public PilotType Pilot { get; set; }
+        public IEnumerable<Flight> Flights { get; set; }
 
         public override string? ToString()
         {

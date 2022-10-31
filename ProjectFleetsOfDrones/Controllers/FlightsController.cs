@@ -31,5 +31,11 @@ namespace ProjectFleetsOfDrones.Controllers
                 "nopath",
                 flightAdded);
         }
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            return Ok(_flightService.GetDetailsFlight(id));
+        }
     }
 }
