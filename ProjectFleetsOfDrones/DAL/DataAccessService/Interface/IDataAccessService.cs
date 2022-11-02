@@ -10,5 +10,7 @@ namespace ProjectFleetsOfDrones.DAL.Interface
         List<Flight> ToList();
         Flight Add(Flight flightToAdd);
         Flight GetFlightById(int id);
+        void Delete(int id);
+        Flight Update(Flight flight);
     }
 }

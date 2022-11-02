@@ -3,6 +3,7 @@ using ProjectFleetsOfDrones.Helpers;
 using ProjectFleetsOfDrones.Interfaces;
 using ProjectFleetsOfDrones.Models;
 using ProjectFleetsOfDrones.Models.Post;
+using ProjectFleetsOfDrones.Models.Put;
 
 namespace ProjectFleetsOfDrones.Services
 {
@@ -28,7 +29,8 @@ namespace ProjectFleetsOfDrones.Services
         {
             var flight = _dataAccessService.GetFlightById(id);
 
-            var droneWithoutFlights = new DroneWithoutFlights {
+            var droneWithoutFlights = new DroneWithoutFlights
+            {
                 DroneId = flight.Drone.DroneId,
                 FlightTime = flight.Drone.FlightTime,
                 Pilot = flight.Drone.Pilot.ToString(),
@@ -42,7 +44,7 @@ namespace ProjectFleetsOfDrones.Services
                 EndDate = flight.EndDate,
                 Drone = droneWithoutFlights
             };
-                        
+
             return flightWithDrone;
         }
         public Flight InsertDroneToFlight(int idFlight, int idDrone)
@@ -89,7 +91,7 @@ namespace ProjectFleetsOfDrones.Services
         private Flight MapToFlight(PostFlightModel flightToAdd)
         {
             var flightWithId = new Flight();
-            flightWithId.FlightId = GetId();
+            //flightWithId.FlightId = GetId(); --> non posso settare id (primary key dell'entità Flight) != 0
             flightWithId.StartDate = flightToAdd.StartDate;
             flightWithId.EndDate = flightToAdd.EndDate;
             flightWithId.DroneId = flightToAdd.DroneId;
@@ -98,9 +100,26 @@ namespace ProjectFleetsOfDrones.Services
         private int GetId()
         {
             var readFlights = _dataAccessService.ReadFlights();
-            if(readFlights.Any())
+            if (readFlights.Any())
                 return readFlights.Max(flight => flight.FlightId) + 1;
             return 1;
+        }
+
+        public void Delete(int id)
+        {
+            _dataAccessService.Delete(id);
+        }
+
+        public Flight Update(int id, PutFlightModel flightToUpdate)
+        {
+            //var flight = _dataAccessService.GetFlightById(id);
+            var flight = new Flight
+            {
+                FlightId = id,
+                StartDate = flightToUpdate.StartDate,
+                EndDate = flightToUpdate.EndDate
+            };
+            return _dataAccessService.Update(flight);
         }
     }
 }

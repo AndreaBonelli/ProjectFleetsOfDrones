@@ -1,5 +1,6 @@
 ﻿using ProjectFleetsOfDrones.Models;
 using ProjectFleetsOfDrones.Models.Post;
+using ProjectFleetsOfDrones.Models.Put;
 
 namespace ProjectFleetsOfDrones.Interfaces
 {
@@ -9,5 +10,7 @@ namespace ProjectFleetsOfDrones.Interfaces
         public FlightWithDrone GetDetailsFlight(int id);
         public List<Flight> GetFlights();
         public Flight InsertDroneToFlight(int idFlight, int idDrone);
+        void Delete(int id);
+        Flight Update(int id, PutFlightModel flightToUpdate);
     }
 }

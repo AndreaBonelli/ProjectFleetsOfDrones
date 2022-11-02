@@ -36,7 +36,9 @@ namespace ProjectFleetsOfDrones.DAL
 
         public Flight Add(Flight flightToAdd)
         {
-            throw new NotImplementedException();
+            var flight = _ctx.Flights.Add(flightToAdd);   
+            _ctx.SaveChanges();
+            return flightToAdd;
         }
 
         public IEnumerable<Drone> ReadDrones()
@@ -53,6 +55,20 @@ namespace ProjectFleetsOfDrones.DAL
         public void WriteFlights(IEnumerable<Flight> flights)
         {
             throw new NotImplementedException();
+        }
+
+        public void Delete(int id)
+        {
+            var flight = _ctx.Flights.Single(flight => flight.FlightId == id);
+            _ctx.Flights.Remove(flight);
+            _ctx.SaveChanges();
+        }
+
+        public Flight Update(Flight flight)
+        {
+            var flightUpdated = _ctx.Flights.Update(flight);
+            _ctx.SaveChanges();
+            return flightUpdated.Entity;
         }
     }
 }
